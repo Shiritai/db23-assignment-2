@@ -8,9 +8,8 @@ import org.vanilladb.core.sql.storedprocedure.StoredProcedure;
  */
 public class UpdatePriceProc extends StoredProcedure<UpdatePriceProcParamHelper> {
 
-    public UpdatePriceProc(UpdatePriceProcParamHelper helper) {
-        super(helper);
-        //TODO Auto-generated constructor stub
+    public UpdatePriceProc() {
+        super(new UpdatePriceProcParamHelper());
     }
 
     @Override
