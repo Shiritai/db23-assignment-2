@@ -25,7 +25,7 @@ public class StartUp {
 
 	public static void main(String args[]) throws Exception {
 		if (logger.isLoggable(Level.INFO))
-			logger.info("initing...");
+			logger.info("initiating...");
 
 		// configure and initialize the database
 		VanillaDb.init(args[0]);
