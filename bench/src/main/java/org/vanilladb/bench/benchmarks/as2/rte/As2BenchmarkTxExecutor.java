@@ -63,4 +63,12 @@ public class As2BenchmarkTxExecutor extends TransactionExecutor<As2BenchTransact
 	protected JdbcExecutor<As2BenchTransactionType> getJdbcExecutor() {
 		return jdbcExecutor;
 	}
+
+	/**
+	 * Fetch current transaction type
+	 * @return
+	 */
+	public As2BenchTransactionType getTxnType() {
+		return pg.getTxnType();
+	}
 }

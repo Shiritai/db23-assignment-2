@@ -18,7 +18,9 @@ package org.vanilladb.bench;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.DoubleStream;
 
+import org.vanilladb.bench.benchmarks.as2.As2BenchTransactionType;
 import org.vanilladb.bench.util.BenchProperties;
 
 public class VanillaBenchParameters {
@@ -43,9 +45,19 @@ public class VanillaBenchParameters {
 	public static final boolean PROFILING_ON_SERVER;
 	
 	public static final File REPORT_OUTPUT_DIRECTORY;
+
+	/**
+	 * The granularity for summarizing the performance of benchmarking 
+	 */
 	public static final int REPORT_TIMELINE_GRANULARITY;
 	
 	public static final boolean SHOW_TXN_RESPONSE_ON_CONSOLE;
+
+	/**
+	 * Percentage of benchmark tasks of
+	 * [ ReadItemTxn, UpdateItemPriceTxn ] distribution
+	 */
+	public static final double[] READ_WRITE_TX_RATE;
 
 	static {
 		WARM_UP_INTERVAL = BenchProperties.getLoader().getPropertyAsLong(
@@ -63,6 +75,15 @@ public class VanillaBenchParameters {
 		
 		SERVER_IP = BenchProperties.getLoader().getPropertyAsString(
 				VanillaBenchParameters.class.getName() + ".SERVER_IP", "127.0.0.1");
+		
+		int avg = 100 / As2BenchTransactionType.numOfBench;
+		READ_WRITE_TX_RATE = BenchProperties.getLoader().getPropertyAsDoubleArray(
+				VanillaBenchParameters.class.getName() + ".READ_WRITE_TX_RATE", 
+				DoubleStream.generate(() -> avg).limit(As2BenchTransactionType.numOfBench).toArray());
+		System.out.println("-----[print array]----");
+		for (double d: READ_WRITE_TX_RATE)
+			System.out.printf("%lf, ", d);
+		System.out.println("----------------------");
 		
 		int conMode = BenchProperties.getLoader().getPropertyAsInteger(
 				VanillaBenchParameters.class.getName() + ".CONNECTION_MODE", 1);

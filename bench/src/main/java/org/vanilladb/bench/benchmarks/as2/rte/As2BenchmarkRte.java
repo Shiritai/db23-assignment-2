@@ -16,24 +16,38 @@
 package org.vanilladb.bench.benchmarks.as2.rte;
 
 import org.vanilladb.bench.StatisticMgr;
+import org.vanilladb.bench.VanillaBenchParameters;
 import org.vanilladb.bench.benchmarks.as2.As2BenchTransactionType;
 import org.vanilladb.bench.remote.SutConnection;
 import org.vanilladb.bench.rte.RemoteTerminalEmulator;
+import org.vanilladb.bench.util.RandomValueGenerator;
 
 public class As2BenchmarkRte extends RemoteTerminalEmulator<As2BenchTransactionType> {
-	
-	private As2BenchmarkTxExecutor executor;
+
+	private static As2BenchmarkTxExecutor[] executors;
+
+	static {
+		executors = new As2BenchmarkTxExecutor[] {
+			new As2BenchmarkTxExecutor(new As2ReadItemParamGen()),
+			new As2BenchmarkTxExecutor(new As2UpdatePriceParamGen())
+		};
+	};
+
+	RandomValueGenerator rv;
+	int current;
 
 	public As2BenchmarkRte(SutConnection conn, StatisticMgr statMgr, long sleepTime) {
 		super(conn, statMgr, sleepTime);
-		executor = new As2BenchmarkTxExecutor(new As2ReadItemParamGen());
+		rv = new RandomValueGenerator(sleepTime);
+		current = 0;
 	}
-	
+
 	protected As2BenchTransactionType getNextTxType() {
-		return As2BenchTransactionType.READ_ITEM;
+		current = rv.randomChooseFromDistribution(VanillaBenchParameters.READ_WRITE_TX_RATE);
+		return executors[current].getTxnType();
 	}
-	
+
 	protected As2BenchmarkTxExecutor getTxExecutor(As2BenchTransactionType type) {
-		return executor;
+		return executors[current];
 	}
 }
