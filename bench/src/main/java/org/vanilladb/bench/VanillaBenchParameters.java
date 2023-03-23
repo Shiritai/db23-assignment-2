@@ -59,6 +59,11 @@ public class VanillaBenchParameters {
 	 */
 	public static final double[] READ_WRITE_TX_RATE;
 
+	/**
+	 * statistic analysis interval, in second
+	 */
+	public static final long ANALYZE_INTERVAL;
+
 	static {
 		WARM_UP_INTERVAL = BenchProperties.getLoader().getPropertyAsLong(
 				VanillaBenchParameters.class.getName() + ".WARM_UP_INTERVAL", 60000);
@@ -82,8 +87,11 @@ public class VanillaBenchParameters {
 				DoubleStream.generate(() -> avg).limit(As2BenchTransactionType.numOfBench).toArray());
 		System.out.println("-----[print array]----");
 		for (double d: READ_WRITE_TX_RATE)
-			System.out.printf("%lf, ", d);
+			System.out.printf("%f, ", d);
 		System.out.println("----------------------");
+
+		ANALYZE_INTERVAL = BenchProperties.getLoader().getPropertyAsLong(
+			VanillaBenchParameters.class.getName() + ".ANALYZE_INTERVAL", 5l);
 		
 		int conMode = BenchProperties.getLoader().getPropertyAsInteger(
 				VanillaBenchParameters.class.getName() + ".CONNECTION_MODE", 1);

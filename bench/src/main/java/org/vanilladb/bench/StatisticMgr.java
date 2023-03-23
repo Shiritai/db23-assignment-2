@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -106,6 +107,7 @@ public class StatisticMgr {
 				fileName += "-" + fileNamePostfix; // E.g. "20220324-200824-postfix"
 
 			outputDetailReport(fileName);
+			outputVerboseDetailReport(fileName);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -117,6 +119,7 @@ public class StatisticMgr {
 
 	/**
 	 * Write execution time report in txt format
+	 * 
 	 * @param fileName
 	 * @throws IOException
 	 */
@@ -187,70 +190,59 @@ public class StatisticMgr {
 		}
 	}
 
+	/**
+	 * Write execution time report with statistic analysis in csv format
+	 * 
+	 * @param fileName
+	 * @throws IOException
+	 */
 	private void outputVerboseDetailReport(String fileName) throws IOException {
-		Map<BenchTransactionType, TxnStatistic> txnStatistics = new HashMap<BenchTransactionType, TxnStatistic>();
-		Map<BenchTransactionType, Integer> abortedCounts = new HashMap<BenchTransactionType, Integer>();
-
-		for (BenchTransactionType type : allTxTypes) {
-			txnStatistics.put(type, new TxnStatistic(type));
-			abortedCounts.put(type, 0);
-		}
-
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputDir, fileName + ".txt")))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputDir, fileName + ".csv")))) {
 			// First line: total transaction count
-			writer.write("# of txns (including aborted) during benchmark period: " + resultSets.size());
-			writer.newLine();
+			writer.write(
+					"time(sec), throughput(txs), avg_latency(ms), min(ms), max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)\n");
 
 			// Detail latency report
+			long lead = recordStartTime, currentTime = 0;
+			final long step = VanillaBenchParameters.ANALYZE_INTERVAL * 1000000000; // in nanosecond
+			ArrayList<Long> batch = new ArrayList<>();
 			for (TxnResultSet resultSet : resultSets) {
-				if (resultSet.isTxnIsCommited()) {
-					// Write a line: {[Tx Type]: [Latency]}
-					writer.write(resultSet.getTxnType() + ": "
-							+ TimeUnit.NANOSECONDS.toMillis(resultSet.getTxnResponseTime()) + " ms");
-					writer.newLine();
+				if (resultSet.getTxnEndTime() >= lead + step) {
+					lead += step;
+					currentTime += VanillaBenchParameters.ANALYZE_INTERVAL;
+					// start analysis
+					long throughput = batch.size(), avg_latency = 0,
+							min = Long.MAX_VALUE, max = Long.MIN_VALUE,
+							lat_25th, lat_median, lat_75th;
+					for (long n : batch) {
+						avg_latency += n;
+						min = Math.min(min, n);
+						max = Math.max(max, n);
+					}
+					PriorityQueue<Long> pq = new PriorityQueue<>(batch);
+					while ((pq.size() << 2) > throughput * 3) { // haven't reach 25th
+						pq.poll();
+					}
+					lat_25th = pq.peek();
+					while ((pq.size() << 1) > throughput) { // haven't reach median
+						pq.poll();
+					}
+					lat_median = pq.peek();
+					while ((pq.size() << 2) > throughput) { // haven't reach 75th
+						pq.poll();
+					}
+					lat_75th = pq.peek();
 
-					// Count transaction for each type
-					TxnStatistic txnStatistic = txnStatistics.get(resultSet.getTxnType());
-					txnStatistic.addTxnResponseTime(resultSet.getTxnResponseTime());
-
-				} else {
-					writer.write(resultSet.getTxnType() + ": ABORTED");
-					writer.newLine();
-
-					// Count transaction for each type
-					Integer count = abortedCounts.get(resultSet.getTxnType());
-					abortedCounts.put(resultSet.getTxnType(), count + 1);
+					/**
+					 * Write a line:
+					 * time(sec), throughput(txs), avg_latency(ms), min(ms),
+					 * max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)
+					 */
+					writer.write(String.format("%d,%d,%d,%d,%d,%d,%d,%d\n",
+							currentTime, throughput, avg_latency,
+							min, max, lat_25th, lat_median, lat_75th));
 				}
 			}
-			writer.newLine();
-
-			// Last few lines: show the statistics for each type of transactions
-			int abortedTotal = 0;
-			for (Entry<BenchTransactionType, TxnStatistic> entry : txnStatistics.entrySet()) {
-				TxnStatistic value = entry.getValue();
-				int abortedCount = abortedCounts.get(entry.getKey());
-				abortedTotal += abortedCount;
-				long avgResTimeMs = 0;
-
-				if (value.txnCount > 0) {
-					avgResTimeMs = TimeUnit.NANOSECONDS.toMillis(value.getTotalResponseTime() / value.txnCount);
-				}
-
-				writer.write(value.getmType() + " - committed: " + value.getTxnCount() + ", aborted: " + abortedCount
-						+ ", avg latency: " + avgResTimeMs + " ms");
-
-				writer.newLine();
-			}
-
-			// Last line: Total statistics
-			int finishedCount = resultSets.size() - abortedTotal;
-			double avgResTimeMs = 0;
-			if (finishedCount > 0) { // Avoid "Divide By Zero"
-				for (TxnResultSet rs : resultSets)
-					avgResTimeMs += rs.getTxnResponseTime() / finishedCount;
-			}
-			writer.write(String.format("TOTAL - committed: %d, aborted: %d, avg latency: %d ms", finishedCount,
-					abortedTotal, Math.round(avgResTimeMs / 1000000)));
 		}
 	}
 }
