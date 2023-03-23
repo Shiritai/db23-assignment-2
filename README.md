@@ -149,9 +149,9 @@ If we find you copy someone’s code, you will get **0 point** for this assignme
 ## Deadline
 
 ### Phase 1 
-Submit your work before **2023/03/30 (Wed.) 23:59:59**.
+Submit your work before **2023/03/29 (Wed.) 23:59:59**.
 
 ### Phase 2 
-Submit your work before **2023/04/06 (Wed.) 23:59:59**.
+Submit your work before **2023/04/05 (Wed.) 23:59:59**.
 
 Late submission will NOT be accepted.
