@@ -16,6 +16,10 @@
 		</repository>
 	</repositories>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -47,6 +51,27 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+						<!-- VM argument -->
+						<argument>-Djava.util.logging.config.file=target/classes/java/util/logging/logging.properties</argument>
+						<argument>-Dorg.vanilladb.bench.config.file=target/classes/org/vanilladb/bench/vanillabench.properties</argument>
+						<argument>-Dorg.vanilladb.core.config.file=target/classes/org/vanilladb/core/vanilladb.properties</argument>
+
+                        <argument>-classpath</argument>
+                        <classpath /> 
+                        <argument>org.vanilladb.core.server.StartUp</argument>
+						<!-- Program argument -->
+                        <argument>benchDB</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 </project>
