@@ -22,7 +22,7 @@ import org.vanilladb.core.sql.storedprocedure.StoredProcedureFactory;
 public class As2BenchStoredProcFactory implements StoredProcedureFactory {
 
 	@Override
-	public StoredProcedure<?> getStroredProcedure(int pid) {
+	public StoredProcedure<?> getStoredProcedure(int pid) {
 		StoredProcedure<?> sp;
 		switch (As2BenchTransactionType.fromProcedureId(pid)) {
 		case TESTBED_LOADER:

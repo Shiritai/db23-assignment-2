@@ -27,7 +27,7 @@ public class VanillaDbJdbcStartUp implements SutStartUp {
 
 	public void startup(String[] args) {
 		if (logger.isLoggable(Level.INFO))
-			logger.info("initing...");
+			logger.info("initiating...");
 
 		VanillaDb.init(args[0]);
 		if (logger.isLoggable(Level.INFO))

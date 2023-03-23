@@ -21,7 +21,7 @@ public class As2CheckDatabaseProc extends StoredProcedure<TestbedLoaderParamHelp
 			logger.info("Checking database for the as2 benchmarks...");
 
 		// Checking item records
-		if (!checkItemTable(1, getParamHelper().getNumberOfItems()))
+		if (!checkItemTable(1, getHelper().getNumberOfItems()))
 			abort("checking database fails");
 
 		if (logger.isLoggable(Level.INFO))

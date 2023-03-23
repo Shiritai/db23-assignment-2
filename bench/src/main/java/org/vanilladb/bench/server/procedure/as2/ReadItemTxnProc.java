@@ -29,7 +29,7 @@ public class ReadItemTxnProc extends StoredProcedure<ReadItemProcParamHelper> {
 
 	@Override
 	protected void executeSql() {
-		ReadItemProcParamHelper paramHelper = getParamHelper();
+		ReadItemProcParamHelper paramHelper = getHelper();
 		Transaction tx = getTransaction();
 		
 		// SELECT

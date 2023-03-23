@@ -46,7 +46,7 @@ public class TestbedLoaderProc extends StoredProcedure<TestbedLoaderParamHelper>
 		createSchemas();
 
 		// Generate item records
-		generateItems(1, getParamHelper().getNumberOfItems());
+		generateItems(1, getHelper().getNumberOfItems());
 
 		if (logger.isLoggable(Level.INFO))
 			logger.info("Loading completed. Flush all loading data to disks...");
@@ -71,7 +71,7 @@ public class TestbedLoaderProc extends StoredProcedure<TestbedLoaderParamHelper>
 	}
 	
 	private void createSchemas() {
-		TestbedLoaderParamHelper paramHelper = getParamHelper();
+		TestbedLoaderParamHelper paramHelper = getHelper();
 		Transaction tx = getTransaction();
 		
 		if (logger.isLoggable(Level.FINE))
