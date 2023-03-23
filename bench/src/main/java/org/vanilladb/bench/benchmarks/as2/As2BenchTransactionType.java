@@ -25,15 +25,35 @@ public enum As2BenchTransactionType implements BenchTransactionType {
 	CHECK_DATABASE(false),
 	
 	// Benchmarking procedures
-	/* Read item bench marking */
-	READ_ITEM(true),
 	/**
-	 * Note by Shiritai: in Java, the last instance of enum
+	 * Read item bench marking
+	 */
+	READ_ITEM(true),
+	
+	/**
+	 * Update price bench marking
+	 */
+	UPDATE_PRICE(true);
+
+	/**
+	 * Numbers of bench marks
+	 */
+	public static final int numOfBench;
+
+	static {
+		int i = 0;
+		for (As2BenchTransactionType a: values()) {
+			if (a.isBenchProc) {
+				++i;
+			}
+		}
+		numOfBench = i;
+	}
+
+	/*
+	 * Noted by Shiritai: in Java, the last instance of enum
 	 * should ends with ";" rather than ","
 	 */
-	
-	/* Update price bench marking */
-	UPDATE_PRICE(true);
 	
 	public static As2BenchTransactionType fromProcedureId(int pid) {
 		return As2BenchTransactionType.values()[pid];
