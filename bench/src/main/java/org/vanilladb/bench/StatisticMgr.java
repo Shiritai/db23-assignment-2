@@ -181,4 +181,71 @@ public class StatisticMgr {
 					abortedTotal, Math.round(avgResTimeMs / 1000000)));
 		}
 	}
+
+	private void outputVerboseDetailReport(String fileName) throws IOException {
+		Map<BenchTransactionType, TxnStatistic> txnStatistics = new HashMap<BenchTransactionType, TxnStatistic>();
+		Map<BenchTransactionType, Integer> abortedCounts = new HashMap<BenchTransactionType, Integer>();
+
+		for (BenchTransactionType type : allTxTypes) {
+			txnStatistics.put(type, new TxnStatistic(type));
+			abortedCounts.put(type, 0);
+		}
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputDir, fileName + ".txt")))) {
+			// First line: total transaction count
+			writer.write("# of txns (including aborted) during benchmark period: " + resultSets.size());
+			writer.newLine();
+
+			// Detail latency report
+			for (TxnResultSet resultSet : resultSets) {
+				if (resultSet.isTxnIsCommited()) {
+					// Write a line: {[Tx Type]: [Latency]}
+					writer.write(resultSet.getTxnType() + ": "
+							+ TimeUnit.NANOSECONDS.toMillis(resultSet.getTxnResponseTime()) + " ms");
+					writer.newLine();
+
+					// Count transaction for each type
+					TxnStatistic txnStatistic = txnStatistics.get(resultSet.getTxnType());
+					txnStatistic.addTxnResponseTime(resultSet.getTxnResponseTime());
+
+				} else {
+					writer.write(resultSet.getTxnType() + ": ABORTED");
+					writer.newLine();
+
+					// Count transaction for each type
+					Integer count = abortedCounts.get(resultSet.getTxnType());
+					abortedCounts.put(resultSet.getTxnType(), count + 1);
+				}
+			}
+			writer.newLine();
+
+			// Last few lines: show the statistics for each type of transactions
+			int abortedTotal = 0;
+			for (Entry<BenchTransactionType, TxnStatistic> entry : txnStatistics.entrySet()) {
+				TxnStatistic value = entry.getValue();
+				int abortedCount = abortedCounts.get(entry.getKey());
+				abortedTotal += abortedCount;
+				long avgResTimeMs = 0;
+
+				if (value.txnCount > 0) {
+					avgResTimeMs = TimeUnit.NANOSECONDS.toMillis(value.getTotalResponseTime() / value.txnCount);
+				}
+
+				writer.write(value.getmType() + " - committed: " + value.getTxnCount() + ", aborted: " + abortedCount
+						+ ", avg latency: " + avgResTimeMs + " ms");
+
+				writer.newLine();
+			}
+
+			// Last line: Total statistics
+			int finishedCount = resultSets.size() - abortedTotal;
+			double avgResTimeMs = 0;
+			if (finishedCount > 0) { // Avoid "Divide By Zero"
+				for (TxnResultSet rs : resultSets)
+					avgResTimeMs += rs.getTxnResponseTime() / finishedCount;
+			}
+			writer.write(String.format("TOTAL - committed: %d, aborted: %d, avg latency: %d ms", finishedCount,
+					abortedTotal, Math.round(avgResTimeMs / 1000000)));
+		}
+	}
 }
