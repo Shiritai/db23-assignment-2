@@ -68,7 +68,7 @@ public abstract class RemoteTerminalEmulator<T extends BenchTransactionType> ext
 
 	protected abstract T getNextTxType();
 	
-	protected abstract TransactionExecutor<T> getTxExeutor(T type);
+	protected abstract TransactionExecutor<T> getTxExecutor(T type);
 	
 	protected void sleep() {		
 		if (sleepTime > 0) {
@@ -83,7 +83,7 @@ public abstract class RemoteTerminalEmulator<T extends BenchTransactionType> ext
 	
 	private TxnResultSet executeTxnCycle(SutConnection conn) {
 		T txType = getNextTxType();
-		TransactionExecutor<T> executor = getTxExeutor(txType);
+		TransactionExecutor<T> executor = getTxExecutor(txType);
 		return executor.execute(conn);
 	}
 }

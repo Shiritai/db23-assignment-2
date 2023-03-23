@@ -33,7 +33,7 @@ public class As2BenchmarkRte extends RemoteTerminalEmulator<As2BenchTransactionT
 		return As2BenchTransactionType.READ_ITEM;
 	}
 	
-	protected As2BenchmarkTxExecutor getTxExeutor(As2BenchTransactionType type) {
+	protected As2BenchmarkTxExecutor getTxExecutor(As2BenchTransactionType type) {
 		return executor;
 	}
 }
