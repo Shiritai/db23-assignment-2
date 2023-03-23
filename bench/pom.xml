@@ -15,6 +15,10 @@
 		</repository>
 	</repositories>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -30,6 +34,108 @@
 			<!-- <version>0.7.0-2023-spring</version> -->
 		</dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>server_startup</id>
+			<activation>
+				<property>
+					<name>server_startup</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!-- Executetion -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<configuration>
+							<executable>java</executable>
+							<arguments>
+								<!-- VM argument -->
+								<argument>-Djava.util.logging.config.file=target/classes/java/util/logging/logging.properties</argument>
+								<argument>-Dorg.vanilladb.bench.config.file=target/classes/org/vanilladb/bench/vanillabench.properties</argument>
+								<argument>-Dorg.vanilladb.core.config.file=target/classes/org/vanilladb/core/vanilladb.properties</argument>
+		
+								<argument>-classpath</argument>
+								<classpath /> 
+								<argument>org.vanilladb.bench.server.StartUp</argument>
+								<!-- Program argument -->
+								<argument>benchDB</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>client_load</id>
+			<activation>
+				<property>
+					<name>client_load</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!-- Executetion -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<configuration>
+							<executable>java</executable>
+							<arguments>
+								<!-- VM argument -->
+								<argument>-Djava.util.logging.config.file=target/classes/java/util/logging/logging.properties</argument>
+								<argument>-Dorg.vanilladb.bench.config.file=target/classes/org/vanilladb/bench/vanillabench.properties</argument>
+								<argument>-Dorg.vanilladb.core.config.file=target/classes/org/vanilladb/core/vanilladb.properties</argument>
+		
+								<argument>-classpath</argument>
+								<classpath /> 
+								<argument>org.vanilladb.bench.App</argument>
+								<!-- Program argument -->
+								<argument>1</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>client_bench</id>
+			<activation>
+				<property>
+					<name>client_bench</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!-- Executetion -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<configuration>
+							<executable>java</executable>
+							<arguments>
+								<!-- VM argument -->
+								<argument>-Djava.util.logging.config.file=target/classes/java/util/logging/logging.properties</argument>
+								<argument>-Dorg.vanilladb.bench.config.file=target/classes/org/vanilladb/bench/vanillabench.properties</argument>
+								<argument>-Dorg.vanilladb.core.config.file=target/classes/org/vanilladb/core/vanilladb.properties</argument>
+		
+								<argument>-classpath</argument>
+								<classpath /> 
+								<argument>org.vanilladb.bench.App</argument>
+								<!-- Program argument -->
+								<argument>2</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
