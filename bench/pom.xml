@@ -4,13 +4,14 @@
 
 	<groupId>org.vanilladb</groupId>
 	<artifactId>bench</artifactId>
-	<version>0.5.0-2023-spring</version>
+	<version>0.7.0-2023-spring</version>
+	<!-- <version>0.5.0-2023-spring</version> -->
 
 	<repositories>
 		<repository>
 			<id>local-repo</id>
 			<name>LocalRepository</name>
-			<url>file://${project.basedir}../core-patch/repo</url>
+			<url>file://${project.basedir}/../core-patch/repo</url>
 		</repository>
 	</repositories>
 
@@ -23,8 +24,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.vanilladb</groupId>
-			<artifactId>core-patch</artifactId>
-			<version>0.7.0-2023-spring</version>
+			<artifactId>core</artifactId>
+			<version>0.7.0-course-20230307</version>
+			<!-- <artifactId>core-patch</artifactId> -->
+			<!-- <version>0.7.0-2023-spring</version> -->
 		</dependency>
 	</dependencies>
 
