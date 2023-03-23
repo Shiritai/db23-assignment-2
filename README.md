@@ -62,7 +62,7 @@ READ_ITEM: 2 ms
 READ_ITEM: 2 ms
 
 READ_ITEM 33559 avg latency: 2 ms
-Total 33678 Aborted 119 Commited 33559 avg Commited latency: 3 ms
+Total 33678 Aborted 119 Committed 33559 avg Committed latency: 3 ms
 ```
 
 As you can see, it only summarizes the throughput (txs/min) and the average latency (ms). However, we usually need more information in order to get a deep insight into the experiment. Hence, you are required to modify `StatisticMgr` to make it produce **another report** with average, minimum, maximum, 25th, median, 75th latency along with throughput in every 5 seconds.
