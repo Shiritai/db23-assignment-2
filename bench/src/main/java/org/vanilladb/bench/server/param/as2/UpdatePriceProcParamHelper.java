@@ -10,6 +10,34 @@ import org.vanilladb.core.sql.storedprocedure.StoredProcedureHelper;
  */
 public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 
+    private int updateCount;
+    private int[] updateItemId;
+    private String[] itemName;
+    private double[] itemPrice;
+    private double[] priceRaise;
+
+    public int getUpdateCount() {
+        return updateCount;
+    }
+
+    public int getUpdateItemId(int index) {
+        return updateItemId[index];
+    }
+
+    public double getPriceRaise(int index) {
+        return priceRaise[index];
+    }
+
+    public void setItemName(String s, int idx) {
+		itemName[idx] = s;
+	}
+
+	public void setItemPrice(double d, int idx) {
+		itemPrice[idx] = d;
+	}
+
+    public void set
+
     @Override
     public Schema getResultSetSchema() {
         // TODO Auto-generated method stub
@@ -19,7 +47,7 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
     @Override
     public boolean isReadOnly() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isReadOnly'");
+        return false;
     }
 
     @Override
