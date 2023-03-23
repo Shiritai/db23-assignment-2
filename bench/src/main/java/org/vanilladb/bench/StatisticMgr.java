@@ -115,6 +115,11 @@ public class StatisticMgr {
 			logger.info("Finish creating benchmark report.");
 	}
 
+	/**
+	 * Write execution time report in txt format
+	 * @param fileName
+	 * @throws IOException
+	 */
 	private void outputDetailReport(String fileName) throws IOException {
 		Map<BenchTransactionType, TxnStatistic> txnStatistics = new HashMap<BenchTransactionType, TxnStatistic>();
 		Map<BenchTransactionType, Integer> abortedCounts = new HashMap<BenchTransactionType, Integer>();

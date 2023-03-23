@@ -17,6 +17,9 @@ package org.vanilladb.bench.server;
 
 import org.vanilladb.bench.VanillaBenchParameters;
 
+/**
+ * Entry of server
+ */
 public class StartUp {
 
 	public static void main(String[] args) throws Exception {

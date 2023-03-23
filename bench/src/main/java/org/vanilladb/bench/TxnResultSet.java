@@ -15,6 +15,9 @@
  *******************************************************************************/
 package org.vanilladb.bench;
 
+/**
+ * Just a structure storing a bunch of execution analysis result
+ */
 public class TxnResultSet {
 	private BenchTransactionType txnType;
 	private long respTime; // in ns

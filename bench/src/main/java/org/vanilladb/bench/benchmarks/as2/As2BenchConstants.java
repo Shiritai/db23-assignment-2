@@ -19,6 +19,9 @@ import org.vanilladb.bench.util.BenchProperties;
 
 public class As2BenchConstants {
 
+	/**
+	 * The number of items in the testing data set
+	 */
 	public static final int NUM_ITEMS;
 	
 	static {

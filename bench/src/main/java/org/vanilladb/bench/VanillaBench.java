@@ -15,7 +15,15 @@ import org.vanilladb.bench.rte.RemoteTerminalEmulator;
 public class VanillaBench {
 	private static Logger logger = Logger.getLogger(VanillaBench.class.getName());
 
+	/**
+	 * Driver to connect from client to server
+	 * using JDBC or Stored Procedure
+	 */
 	private SutDriver driver;
+
+	/**
+	 * In assignment 2: always As2Benchmark
+	 */
 	private Benchmark benchmarker;
 
 	public VanillaBench() {
