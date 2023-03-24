@@ -222,6 +222,7 @@ public class StatisticMgr {
 						min = Math.min(min, n);
 						max = Math.max(max, n);
 					}
+					avg_latency /= throughput;
 					PriorityQueue<Long> pq = new PriorityQueue<>(batch);
 					while ((pq.size() << 2) > throughput * 3) { // haven't reach 25th
 						pq.poll();
@@ -246,9 +247,8 @@ public class StatisticMgr {
 							min, max, lat_25th, lat_median, lat_75th));
 					
 					batch.clear();
-				} else {
-					batch.add(resultSet.getTxnResponseTime());
 				}
+				batch.add(resultSet.getTxnResponseTime());
 			}
 		}
 	}
