@@ -1,5 +1,10 @@
 package org.vanilladb.bench.server.param.as2;
 
+import org.vanilladb.core.sql.DoubleConstant;
+import org.vanilladb.core.sql.IntegerConstant;
+import org.vanilladb.core.sql.Schema;
+import org.vanilladb.core.sql.Type;
+import org.vanilladb.core.sql.VarcharConstant;
 import org.vanilladb.core.sql.Schema;
 import org.vanilladb.core.sql.storedprocedure.SpResultRecord;
 import org.vanilladb.core.sql.storedprocedure.StoredProcedureHelper;
@@ -14,6 +19,7 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
     private int[] updateItemId;
     private String[] itemName;
     private double[] itemPrice;
+    private double[] priceRaise;
 
     public int getUpdateCount() {
         return updateCount;
@@ -30,6 +36,10 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 	public void setItemPrice(double d, int idx) {
 		itemPrice[idx] = d;
 	}
+
+    public double getPriceRaise(int idx){
+        return priceRaise[idx];
+    }
 
     @Override
     public Schema getResultSetSchema() {
@@ -70,8 +80,11 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 		itemName = new String[updateCount];
 		itemPrice = new double[updateCount];
 
-		for (int i = 0; i < updateCount; i++)
-			updateItemId[i] = (Integer) args[indexCnt++];
+		for (int i = 0; i < updateCount; i++){
+            updateItemId[i] = (Integer) args[indexCnt++];
+            priceRaise[i] = (Double) args[indexCnt++];
+        }
+			
     }
     
 }
