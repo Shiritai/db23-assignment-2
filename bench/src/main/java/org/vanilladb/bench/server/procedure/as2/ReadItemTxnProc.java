@@ -47,7 +47,7 @@ public class ReadItemTxnProc extends StoredProcedure<ReadItemProcParamHelper> {
 				paramHelper.setItemName(name, idx);
 				paramHelper.setItemPrice(price, idx);
 			} else
-				throw new RuntimeException("Cloud not find item record with i_id = " + iid);
+				throw new RuntimeException("Could not find item record with i_id = " + iid);
 
 			s.close();
 		}
