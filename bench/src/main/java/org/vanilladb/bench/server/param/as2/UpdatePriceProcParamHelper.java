@@ -14,7 +14,6 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
     private int[] updateItemId;
     private String[] itemName;
     private double[] itemPrice;
-    private double[] priceRaise;
 
     public int getUpdateCount() {
         return updateCount;
@@ -22,10 +21,6 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 
     public int getUpdateItemId(int index) {
         return updateItemId[index];
-    }
-
-    public double getPriceRaise(int index) {
-        return priceRaise[index];
     }
 
     public void setItemName(String s, int idx) {
@@ -36,30 +31,47 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 		itemPrice[idx] = d;
 	}
 
-    public void set
-
     @Override
     public Schema getResultSetSchema() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getResultSetSchema'");
+        Schema sch = new Schema();
+		Type intType = Type.INTEGER;
+		Type itemPriceType = Type.DOUBLE;
+		Type itemNameType = Type.VARCHAR(24);
+		sch.addField("rc", intType);
+		for (int i = 0; i < itemName.length; i++) {
+			sch.addField("i_name_" + i, itemNameType);
+			sch.addField("i_price_" + i, itemPriceType);
+		}
+		return sch;
     }
 
     @Override
     public boolean isReadOnly() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public SpResultRecord newResultSetRecord() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'newResultSetRecord'");
+        SpResultRecord rec = new SpResultRecord();
+		rec.setVal("rc", new IntegerConstant(itemName.length));
+		for (int i = 0; i < itemName.length; i++) {
+			rec.setVal("i_name_" + i, new VarcharConstant(itemName[i], Type.VARCHAR(24)));
+			rec.setVal("i_price_" + i, new DoubleConstant(itemPrice[i]));
+		}
+		return rec;
     }
 
     @Override
-    public void prepareParameters(Object... arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prepareParameters'");
+    public void prepareParameters(Object... args) {
+        int indexCnt = 0;
+
+		updateCount = (Integer) args[indexCnt++];
+		updateItemId = new int[updateCount];
+		itemName = new String[updateCount];
+		itemPrice = new double[updateCount];
+
+		for (int i = 0; i < updateCount; i++)
+			updateItemId[i] = (Integer) args[indexCnt++];
     }
     
 }
