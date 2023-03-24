@@ -62,9 +62,12 @@ public class StatisticMgr {
 			return totalResponseTimeNs;
 		}
 	}
+	
+	// marked unused since this is in template code, may be useful in future
+	@SuppressWarnings("unused")
+	private int timelineGranularity;
 
 	private File outputDir;
-	private int timelineGranularity;
 	private List<TxnResultSet> resultSets = new ArrayList<TxnResultSet>();
 	private List<BenchTransactionType> allTxTypes;
 	private String fileNamePostfix = "";

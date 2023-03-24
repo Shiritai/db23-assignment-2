@@ -11,9 +11,7 @@ import org.vanilladb.bench.benchmarks.as2.As2BenchConstants;
 import org.vanilladb.bench.remote.SutResultSet;
 import org.vanilladb.bench.remote.jdbc.VanillaDbJdbcResultSet;
 import org.vanilladb.bench.rte.jdbc.JdbcJob;
-import org.vanilladb.bench.server.param.as2.ReadItemProcParamHelper;
 import org.vanilladb.bench.server.param.as2.UpdatePriceProcParamHelper;
-import org.vanilladb.bench.server.procedure.StoredProcedureHelper;
 
 /**
  * JDBC implementation of UpdateItemPriceTxn
@@ -61,7 +59,7 @@ public class UpdatePriceJdbcJob implements JdbcJob {
 	            } 
 	            
 	            sql = "UPDATE item SET i_price = " + newPrice + " WHERE i_id = " + iid;
-	            int count = statement.executeUpdate(sql);
+	            statement.executeUpdate(sql);
 			}
 			
 			conn.commit();
