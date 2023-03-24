@@ -2,6 +2,9 @@ package org.vanilladb.bench.server.param.as2;
 
 import org.vanilladb.core.sql.DoubleConstant;
 import org.vanilladb.core.sql.IntegerConstant;
+
+import org.vanilladb.core.sql.Schema;
+import org.vanilladb.core.sql.Type;
 import org.vanilladb.core.sql.Schema;
 import org.vanilladb.core.sql.Type;
 import org.vanilladb.core.sql.VarcharConstant;
@@ -39,7 +42,7 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 	public void setItemPrice(double d, int idx) {
 		itemPrice[idx] = d;
 	}
-
+	
 	@Override
     public void prepareParameters(Object... args) {
         int indexCnt = 0;
@@ -56,7 +59,7 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 		}
 
     }
-	
+
     @Override
     public Schema getResultSetSchema() {
         Schema sch = new Schema();
@@ -87,5 +90,4 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
     public boolean isReadOnly() {
         return false;
     }
-    
 }

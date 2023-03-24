@@ -31,11 +31,12 @@ public class As2UpdatePriceParamGen implements TxParamGenerator<As2BenchTransact
        RandomValueGenerator rvg = new RandomValueGenerator();
        ArrayList<Object> paramList = new ArrayList<Object>();
        
-       // Decide update id and corresponding price raise
-       paramList.add(TOTAL_UPDATE_COUNT);
-		for (int i = 0; i < TOTAL_UPDATE_COUNT; i++)
-			paramList.add(rvg.number(1, As2BenchConstants.NUM_ITEMS));
-			paramList.add(rvg.randomDoubleIncrRange(0.0, 5.0, 1000.0));
+		//Decide update id and corresponding price raise
+		paramList.add(TOTAL_UPDATE_COUNT);
+		for (int i = 0; i < TOTAL_UPDATE_COUNT; i++){
+            paramList.add(rvg.number(1, As2BenchConstants.NUM_ITEMS)); // Randomly pick an item id
+            paramList.add(rvg.randomDoubleIncrRange(0.0, 5.0, 1000.0)); // Randomly generate a number 0.0 - 5.0 for price raise
+        }
 
 		return paramList.toArray(new Object[0]);
     }
