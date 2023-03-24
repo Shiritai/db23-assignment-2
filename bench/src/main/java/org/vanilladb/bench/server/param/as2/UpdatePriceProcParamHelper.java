@@ -79,6 +79,7 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 		updateItemId = new int[updateCount];
 		itemName = new String[updateCount];
 		itemPrice = new double[updateCount];
+		priceRaise = new double[updateCount];
 
 		for (int i = 0; i < updateCount; i++){
             updateItemId[i] = (Integer) args[indexCnt++];
