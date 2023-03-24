@@ -34,7 +34,6 @@ public class UpdatePriceProc extends StoredProcedure<UpdatePriceProcParamHelper>
 				String name = (String) s.getVal("i_name").asJavaVal();
 				price = (Double) s.getVal("i_price").asJavaVal();
 				paramHelper.setItemName(name, idx);
-				paramHelper.setItemPrice(price, idx);
 			} else
 				throw new RuntimeException("Could not find item record with i_id = " + iid);
             s.close();

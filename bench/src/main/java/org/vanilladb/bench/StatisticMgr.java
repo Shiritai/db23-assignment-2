@@ -110,7 +110,7 @@ public class StatisticMgr {
 				fileName += "-" + fileNamePostfix; // E.g. "20220324-200824-postfix"
 
 			outputDetailReport(fileName);
-			outputVerboseDetailReport(fileName);
+			outputStatisticReport(fileName);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -199,7 +199,7 @@ public class StatisticMgr {
 	 * @param fileName
 	 * @throws IOException
 	 */
-	private void outputVerboseDetailReport(String fileName) throws IOException {
+	private void outputStatisticReport(String fileName) throws IOException {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputDir, fileName + ".csv")))) {
 			// First line: total transaction count
 			writer.write(
@@ -222,6 +222,7 @@ public class StatisticMgr {
 						min = Math.min(min, n);
 						max = Math.max(max, n);
 					}
+					avg_latency /= throughput;
 					PriorityQueue<Long> pq = new PriorityQueue<>(batch);
 					while ((pq.size() << 2) > throughput * 3) { // haven't reach 25th
 						pq.poll();
@@ -246,9 +247,8 @@ public class StatisticMgr {
 							min, max, lat_25th, lat_median, lat_75th));
 					
 					batch.clear();
-				} else {
-					batch.add(resultSet.getTxnResponseTime());
 				}
+				batch.add(resultSet.getTxnResponseTime());
 			}
 		}
 	}

@@ -44,8 +44,20 @@ public class As2Benchmark extends Benchmark {
 
 	@Override
 	public void executeLoadingProcedure(SutConnection conn) throws SQLException {
-		conn.callStoredProc(As2BenchTransactionType.TESTBED_LOADER.getProcedureId(),
-				As2BenchConstants.NUM_ITEMS);
+		As2BenchTransactionType txnType = As2BenchTransactionType.TESTBED_LOADER;
+		Object[] params = new Object[] {As2BenchConstants.NUM_ITEMS};
+		
+		switch (VanillaBenchParameters.CONNECTION_MODE) {
+		case JDBC:
+			Connection jdbcConn = conn.toJdbcConnection();
+			jdbcConn.setAutoCommit(false);
+			As2BenchJdbcExecutor executor = new As2BenchJdbcExecutor();
+			executor.execute(jdbcConn, txnType, params);
+			break;
+		case SP:
+			conn.callStoredProc(txnType.getProcedureId(), params);
+			break;
+		}
 	}
 
 	@Override
