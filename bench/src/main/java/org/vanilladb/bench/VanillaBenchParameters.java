@@ -85,10 +85,6 @@ public class VanillaBenchParameters {
 		READ_WRITE_TX_RATE = BenchProperties.getLoader().getPropertyAsDoubleArray(
 				VanillaBenchParameters.class.getName() + ".READ_WRITE_TX_RATE", 
 				DoubleStream.generate(() -> avg).limit(As2BenchTransactionType.numOfBench).toArray());
-		System.out.println("-----[print array]----");
-		for (double d: READ_WRITE_TX_RATE)
-			System.out.printf("%f, ", d);
-		System.out.println("----------------------");
 
 		ANALYZE_INTERVAL = BenchProperties.getLoader().getPropertyAsLong(
 			VanillaBenchParameters.class.getName() + ".ANALYZE_INTERVAL", 5l);
