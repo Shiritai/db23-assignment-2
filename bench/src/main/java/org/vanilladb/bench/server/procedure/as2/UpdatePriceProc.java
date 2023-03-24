@@ -18,13 +18,12 @@ public class UpdatePriceProc extends StoredProcedure<UpdatePriceProcParamHelper>
 
     @Override
     protected void executeSql() {
-        // TODO Auto-generated method stub
         UpdatePriceProcParamHelper paramHelper = getHelper();
         Transaction tx = getTransaction();
 
         for (int idx = 0; idx < paramHelper.getUpdateCount(); idx++){
             int iid = paramHelper.getUpdateItemId(idx);
-            double priceRaise = paramHelper.getPriceRaise(idx);
+            double priceRaise = paramHelper.getUpdatePriceRaise(idx);
             double price;
             Scan s = StoredProcedureHelper.executeQuery(
                 "SELECT i_name, i_price FROM item WHERE i_id = " + iid,

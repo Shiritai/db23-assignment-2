@@ -49,8 +49,8 @@ public class ReadItemProcParamHelper implements StoredProcedureHelper {
 	@Override
 	public void prepareParameters(Object... pars) {
 
-		// Show the contents of paramters
-	   //System.out.println("Params: " + Arrays.toString(pars));
+		// Show the contents of parameters
+	    // System.out.println("Params: " + Arrays.toString(pars));
 
 		int indexCnt = 0;
 

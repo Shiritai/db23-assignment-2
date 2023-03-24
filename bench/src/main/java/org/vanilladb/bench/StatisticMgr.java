@@ -241,6 +241,8 @@ public class StatisticMgr {
 					writer.write(String.format("%d,%d,%d,%d,%d,%d,%d,%d\n",
 							currentTime, throughput, avg_latency,
 							min, max, lat_25th, lat_median, lat_75th));
+				} else {
+					batch.add(resultSet.getTxnResponseTime());
 				}
 			}
 		}
