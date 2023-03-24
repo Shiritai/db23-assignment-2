@@ -5,7 +5,6 @@ import org.vanilladb.core.sql.IntegerConstant;
 import org.vanilladb.core.sql.Schema;
 import org.vanilladb.core.sql.Type;
 import org.vanilladb.core.sql.VarcharConstant;
-import org.vanilladb.core.sql.Schema;
 import org.vanilladb.core.sql.storedprocedure.SpResultRecord;
 import org.vanilladb.core.sql.storedprocedure.StoredProcedureHelper;
 
@@ -81,7 +80,9 @@ public class UpdatePriceProcParamHelper implements StoredProcedureHelper {
 		itemPrice = new double[updateCount];
 
 		for (int i = 0; i < updateCount; i++){
-            updateItemId[i] = (Integer) args[indexCnt++];
+            // updateItemId[i] = (Integer) args[indexCnt++];
+            updateItemId[i] = (Integer) args[indexCnt];
+            
             priceRaise[i] = (Double) args[indexCnt++];
         }
 			

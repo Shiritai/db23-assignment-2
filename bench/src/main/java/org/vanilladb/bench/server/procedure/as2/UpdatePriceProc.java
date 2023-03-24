@@ -18,7 +18,6 @@ public class UpdatePriceProc extends StoredProcedure<UpdatePriceProcParamHelper>
 
     @Override
     protected void executeSql() {
-        // TODO Auto-generated method stub
         UpdatePriceProcParamHelper paramHelper = getHelper();
         Transaction tx = getTransaction();
 
