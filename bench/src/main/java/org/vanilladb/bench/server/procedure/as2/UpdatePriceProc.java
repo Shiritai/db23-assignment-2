@@ -42,7 +42,7 @@ public class UpdatePriceProc extends StoredProcedure<UpdatePriceProcParamHelper>
             if (newPrice > As2BenchConstants.MAX_PRICE){
                 newPrice = As2BenchConstants.MIN_PRICE;
             } 
-            int count = StoredProcedureHelper.executeUpdate(
+            StoredProcedureHelper.executeUpdate(
                 "UPDATE item SET i_price = " + newPrice + "WHERE i_id = " + iid,
                 tx
             );
