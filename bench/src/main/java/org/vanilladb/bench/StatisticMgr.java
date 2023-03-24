@@ -110,7 +110,7 @@ public class StatisticMgr {
 				fileName += "-" + fileNamePostfix; // E.g. "20220324-200824-postfix"
 
 			outputDetailReport(fileName);
-			outputVerboseDetailReport(fileName);
+			outputStatisticReport(fileName);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -199,7 +199,7 @@ public class StatisticMgr {
 	 * @param fileName
 	 * @throws IOException
 	 */
-	private void outputVerboseDetailReport(String fileName) throws IOException {
+	private void outputStatisticReport(String fileName) throws IOException {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputDir, fileName + ".csv")))) {
 			// First line: total transaction count
 			writer.write(
