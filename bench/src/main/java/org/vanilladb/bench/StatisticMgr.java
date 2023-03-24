@@ -62,7 +62,7 @@ public class StatisticMgr {
 			return totalResponseTimeNs;
 		}
 	}
-	
+
 	// marked unused since this is in template code, may be useful in future
 	@SuppressWarnings("unused")
 	private int timelineGranularity;
@@ -244,6 +244,8 @@ public class StatisticMgr {
 					writer.write(String.format("%d,%d,%d,%d,%d,%d,%d,%d\n",
 							currentTime, throughput, avg_latency,
 							min, max, lat_25th, lat_median, lat_75th));
+					
+					batch.clear();
 				} else {
 					batch.add(resultSet.getTxnResponseTime());
 				}
