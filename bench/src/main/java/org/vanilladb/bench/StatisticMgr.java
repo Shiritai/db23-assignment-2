@@ -237,6 +237,14 @@ public class StatisticMgr {
 					}
 					lat_75th = pq.peek();
 
+					// convert ns to ms
+					avg_latency /= 1000000;
+					max 		/= 1000000;
+					min 		/= 1000000;
+					lat_25th 	/= 1000000;
+					lat_median 	/= 1000000;
+					lat_75th 	/= 1000000;
+
 					/**
 					 * Write a line:
 					 * time(sec), throughput(txs), avg_latency(ms), min(ms),
