@@ -42,7 +42,7 @@ public class UpdatePriceJdbcJob implements JdbcJob {
 	            double price;
 	            
 				// SELECT
-				sql = "SELECT i_name FROM item WHERE i_id = " + iid;
+				sql = "SELECT i_name, i_price FROM item WHERE i_id = " + iid;
 				rs = statement.executeQuery(sql);
 				rs.beforeFirst();
 				if (rs.next()) {
