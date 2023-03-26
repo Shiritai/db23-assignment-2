@@ -2,6 +2,7 @@ package org.vanilladb.bench.benchmarks.as2.rte.jdbc;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -46,6 +47,23 @@ public class UpdatePriceJdbcJob implements JdbcJob {
 				rs = statement.executeQuery(sql);
 				rs.beforeFirst();
 				if (rs.next()) {
+					
+					//////////////////////////////////////////////////
+					String colName;
+					String colType;
+					ResultSetMetaData rsmtadta = rs.getMetaData();      // Create a ResultSetMetaData object  1 
+					int colCount = rsmtadta.getColumnCount();
+					                                  // Find number of columns in EMP
+					System.out.println("ColumnCount = " + colCount);
+					 colName = rsmtadta.getColumnName(1);
+					 colType = rsmtadta.getColumnTypeName(1);
+					System.out.println("Column = " + colName + " is data type " + colType);
+//					for (int j=1; j<=colCount; j++) {
+
+//						 System.out.println("Column = " + colName + " is data type " + colType);
+//					}
+					///////////////////////////////////////////
+					
 					outputMsg.append(String.format("'%s', ", rs.getString("i_name")));
 					price = rs.getDouble("i_price");
 				} else
