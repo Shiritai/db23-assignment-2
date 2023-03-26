@@ -208,6 +208,7 @@ public class StatisticMgr {
 			// Detail latency report
 			long lead = recordStartTime, currentTime = 0;
 			final long step = VanillaBenchParameters.ANALYZE_INTERVAL * 1000000000; // in nanosecond
+			final double fact = 1000000; // factor of unit conversion
 			ArrayList<Long> batch = new ArrayList<>();
 			for (TxnResultSet resultSet : resultSets) {
 				if (resultSet.getTxnEndTime() >= lead + step) {
@@ -238,13 +239,14 @@ public class StatisticMgr {
 					lat_75th = pq.peek();
 
 					/**
-					 * Write a line:
+					 * Write a line with unit conversion:
 					 * time(sec), throughput(txs), avg_latency(ms), min(ms),
 					 * max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)
 					 */
-					writer.write(String.format("%d,%d,%d,%d,%d,%d,%d,%d\n",
-							currentTime, throughput, avg_latency,
-							min, max, lat_25th, lat_median, lat_75th));
+					writer.write(String.format("%d,%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
+							currentTime, throughput, avg_latency / fact,
+							min / fact, max / fact, lat_25th / fact, 
+							lat_median / fact, lat_75th / fact));
 					
 					batch.clear();
 				}

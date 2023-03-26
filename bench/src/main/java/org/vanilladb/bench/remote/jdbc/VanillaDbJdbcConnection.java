@@ -30,7 +30,7 @@ public class VanillaDbJdbcConnection implements SutConnection {
 
 	@Override
 	public SutResultSet callStoredProc(int pid, Object... pars) throws SQLException {
-		throw new RuntimeException("Not Implemented: cannot call a stored procedure from a JDBC connection");
+		throw new RuntimeException("cannot call a stored procedure from a JDBC connection");
 	}
 	
 	@Override
