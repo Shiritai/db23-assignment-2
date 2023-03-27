@@ -194,6 +194,44 @@ public class StatisticMgr {
 	}
 
 	/**
+	 * Generate a line of statistic analysis:
+	 * time(sec), throughput(txs), avg_latency(ms), min(ms),
+	 * max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)
+	 */
+	private String calculateStatistic(List<Long> batch, long currentTime) {
+		if (batch.size() < 4) // meaningless for statistic analysis
+			return "";
+		final double fact = 1000000; // factor of unit conversion
+		long throughput = batch.size(), avg_latency = 0,
+				min = Long.MAX_VALUE, max = Long.MIN_VALUE,
+				lat_25th, lat_median, lat_75th;
+		for (long n : batch) {
+			avg_latency += n;
+			min = Math.min(min, n);
+			max = Math.max(max, n);
+		}
+		avg_latency /= throughput;
+		PriorityQueue<Long> pq = new PriorityQueue<>(batch);
+		while ((pq.size() << 2) > throughput * 3) { // haven't reach 25th
+			pq.poll();
+		}
+		lat_25th = pq.peek();
+		while ((pq.size() << 1) > throughput) { // haven't reach median
+			pq.poll();
+		}
+		lat_median = pq.peek();
+		while ((pq.size() << 2) > throughput) { // haven't reach 75th
+			pq.poll();
+		}
+		lat_75th = pq.peek();
+
+		return String.format("%d,%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
+				currentTime, throughput, avg_latency / fact,
+				min / fact, max / fact, lat_25th / fact,
+				lat_median / fact, lat_75th / fact);
+	}
+
+	/**
 	 * Write execution time report with statistic analysis in csv format
 	 * 
 	 * @param fileName
@@ -208,50 +246,18 @@ public class StatisticMgr {
 			// Detail latency report
 			long lead = recordStartTime, currentTime = 0;
 			final long step = VanillaBenchParameters.ANALYZE_INTERVAL * 1000000000; // in nanosecond
-			final double fact = 1000000; // factor of unit conversion
 			ArrayList<Long> batch = new ArrayList<>();
 			for (TxnResultSet resultSet : resultSets) {
 				if (resultSet.getTxnEndTime() >= lead + step) {
 					lead += step;
 					currentTime += VanillaBenchParameters.ANALYZE_INTERVAL;
-					// start analysis
-					long throughput = batch.size(), avg_latency = 0,
-							min = Long.MAX_VALUE, max = Long.MIN_VALUE,
-							lat_25th, lat_median, lat_75th;
-					for (long n : batch) {
-						avg_latency += n;
-						min = Math.min(min, n);
-						max = Math.max(max, n);
-					}
-					avg_latency /= throughput;
-					PriorityQueue<Long> pq = new PriorityQueue<>(batch);
-					while ((pq.size() << 2) > throughput * 3) { // haven't reach 25th
-						pq.poll();
-					}
-					lat_25th = pq.peek();
-					while ((pq.size() << 1) > throughput) { // haven't reach median
-						pq.poll();
-					}
-					lat_median = pq.peek();
-					while ((pq.size() << 2) > throughput) { // haven't reach 75th
-						pq.poll();
-					}
-					lat_75th = pq.peek();
-
-					/**
-					 * Write a line with unit conversion:
-					 * time(sec), throughput(txs), avg_latency(ms), min(ms),
-					 * max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)
-					 */
-					writer.write(String.format("%d,%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
-							currentTime, throughput, avg_latency / fact,
-							min / fact, max / fact, lat_25th / fact, 
-							lat_median / fact, lat_75th / fact));
-					
+					writer.write(calculateStatistic(batch, currentTime));
 					batch.clear();
 				}
 				batch.add(resultSet.getTxnResponseTime());
 			}
+			// add the last one
+			writer.write(calculateStatistic(batch, currentTime));
 		}
 	}
 }
