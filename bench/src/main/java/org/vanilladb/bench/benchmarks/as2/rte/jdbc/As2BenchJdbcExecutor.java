@@ -21,25 +21,32 @@ import java.sql.SQLException;
 import org.vanilladb.bench.benchmarks.as2.As2BenchTransactionType;
 import org.vanilladb.bench.remote.SutResultSet;
 import org.vanilladb.bench.rte.jdbc.JdbcExecutor;
+import org.vanilladb.bench.rte.jdbc.JdbcJob;
 
 public class As2BenchJdbcExecutor implements JdbcExecutor<As2BenchTransactionType> {
 
 	@Override
 	public SutResultSet execute(Connection conn, As2BenchTransactionType txType, Object[] pars)
 			throws SQLException {
+		JdbcJob job = null;
 		switch (txType) {
 		case TESTBED_LOADER:
-			return new LoadingTestbedJdbcJob().execute(conn, pars);
+			job = new LoadingTestbedJdbcJob();
+			break;
 		case CHECK_DATABASE:
-			return new CheckDatabaseJdbcJob().execute(conn, pars);
+			job = new CheckDatabaseJdbcJob();
+			break;
 		case READ_ITEM:
-			return new ReadItemTxnJdbcJob().execute(conn, pars);
+			job = new ReadItemTxnJdbcJob();
+			break;
 		case UPDATE_PRICE:
-			return new UpdatePriceJdbcJob().execute(conn, pars);
+			job = new UpdatePriceJdbcJob();
+			break;
 		default:
 			throw new UnsupportedOperationException(
-					String.format("no JDCB implementation for '%s'", txType));
+					String.format("no JDBC implementation for '%s'", txType));
 		}
+		return job.execute(conn, pars);
 	}
 
 }
