@@ -46,24 +46,7 @@ public class UpdatePriceJdbcJob implements JdbcJob {
 				sql = "SELECT i_name, i_price FROM item WHERE i_id = " + iid;
 				rs = statement.executeQuery(sql);
 				rs.beforeFirst();
-				if (rs.next()) {
-					
-					//////////////////////////////////////////////////
-					String colName;
-					String colType;
-					ResultSetMetaData rsmtadta = rs.getMetaData();      // Create a ResultSetMetaData object  1 
-					int colCount = rsmtadta.getColumnCount();
-					                                  // Find number of columns in EMP
-					System.out.println("ColumnCount = " + colCount);
-					 colName = rsmtadta.getColumnName(1);
-					 colType = rsmtadta.getColumnTypeName(1);
-					System.out.println("Column = " + colName + " is data type " + colType);
-//					for (int j=1; j<=colCount; j++) {
-
-//						 System.out.println("Column = " + colName + " is data type " + colType);
-//					}
-					///////////////////////////////////////////
-					
+				if (rs.next()) {			
 					outputMsg.append(String.format("'%s', ", rs.getString("i_name")));
 					price = rs.getDouble("i_price");
 				} else
