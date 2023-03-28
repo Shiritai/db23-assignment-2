@@ -1,3 +1,0 @@
-READ_ITEM - committed: 23442, aborted: 0, avg latency: 2 ms
-UPDATE_PRICE - committed: 23452, aborted: 2, avg latency: 2 ms
-TOTAL - committed: 46894, aborted: 2, avg latency: 3 ms
