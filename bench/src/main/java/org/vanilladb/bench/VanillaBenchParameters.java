@@ -57,7 +57,7 @@ public class VanillaBenchParameters {
 	 * Percentage of benchmark tasks of
 	 * [ ReadItemTxn, UpdateItemPriceTxn ] distribution
 	 */
-	public static final double[] READ_WRITE_TX_RATE;
+	public static final double[] TASK_TX_DIST;
 
 	/**
 	 * statistic analysis interval, in second
@@ -82,9 +82,15 @@ public class VanillaBenchParameters {
 				VanillaBenchParameters.class.getName() + ".SERVER_IP", "127.0.0.1");
 		
 		int avg = 100 / As2BenchTransactionType.numOfBench;
-		READ_WRITE_TX_RATE = BenchProperties.getLoader().getPropertyAsDoubleArray(
-				VanillaBenchParameters.class.getName() + ".READ_WRITE_TX_RATE", 
-				DoubleStream.generate(() -> avg).limit(As2BenchTransactionType.numOfBench).toArray());
+		double read_rate = BenchProperties.getLoader().getPropertyAsDouble(
+				VanillaBenchParameters.class.getName() + ".READ_WRITE_TX_RATE", 0.);
+		if (read_rate != 0.) { // if assigned read_rate, use it
+			TASK_TX_DIST = new double[] { read_rate, 1 - read_rate };
+		} else { // otherwise, use our TASK_TX_DIST parameter
+			TASK_TX_DIST = BenchProperties.getLoader().getPropertyAsDoubleArray(
+					VanillaBenchParameters.class.getName() + ".TASK_TX_DIST",
+					DoubleStream.generate(() -> avg).limit(As2BenchTransactionType.numOfBench).toArray());
+		}
 
 		ANALYZE_INTERVAL = BenchProperties.getLoader().getPropertyAsLong(
 			VanillaBenchParameters.class.getName() + ".ANALYZE_INTERVAL", 5l);

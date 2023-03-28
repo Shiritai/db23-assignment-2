@@ -43,7 +43,7 @@ public class As2BenchmarkRte extends RemoteTerminalEmulator<As2BenchTransactionT
 	}
 
 	protected As2BenchTransactionType getNextTxType() {
-		current = rv.randomChooseFromDistribution(VanillaBenchParameters.READ_WRITE_TX_RATE);
+		current = rv.randomChooseFromDistribution(VanillaBenchParameters.TASK_TX_DIST);
 		return executors[current].getTxnType();
 	}
 
