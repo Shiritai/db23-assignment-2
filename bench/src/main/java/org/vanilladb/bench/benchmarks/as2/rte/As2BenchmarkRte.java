@@ -25,12 +25,16 @@ import org.vanilladb.bench.util.RandomValueGenerator;
 public class As2BenchmarkRte extends RemoteTerminalEmulator<As2BenchTransactionType> {
 
 	private static As2BenchmarkTxExecutor[] executors;
+	private static final int READ_ITEM;
+	private static final int UPDATE_PRICE;
 
 	static {
 		executors = new As2BenchmarkTxExecutor[] {
 			new As2BenchmarkTxExecutor(new As2ReadItemParamGen()),
 			new As2BenchmarkTxExecutor(new As2UpdatePriceParamGen())
 		};
+		READ_ITEM = 0;
+		UPDATE_PRICE = 1;
 	};
 
 	RandomValueGenerator rv;
@@ -43,7 +47,18 @@ public class As2BenchmarkRte extends RemoteTerminalEmulator<As2BenchTransactionT
 	}
 
 	protected As2BenchTransactionType getNextTxType() {
-		current = rv.randomChooseFromDistribution(VanillaBenchParameters.TASK_TX_DIST);
+		/**
+		 * Consider edge cases
+		 * If there are more test benches, you should add
+		 * them here to make sure not unexpected edge cases
+		 */
+		if (VanillaBenchParameters.TASK_TX_DIST[READ_ITEM] == 1.) {
+			current = READ_ITEM;
+		} else if (VanillaBenchParameters.TASK_TX_DIST[UPDATE_PRICE] == 1.) {
+			current = UPDATE_PRICE;
+		} else {
+			current = rv.randomChooseFromDistribution(VanillaBenchParameters.TASK_TX_DIST);
+		}
 		return executors[current].getTxnType();
 	}
 
