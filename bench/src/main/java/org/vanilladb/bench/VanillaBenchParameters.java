@@ -83,8 +83,8 @@ public class VanillaBenchParameters {
 		
 		int avg = 100 / As2BenchTransactionType.numOfBench;
 		double read_rate = BenchProperties.getLoader().getPropertyAsDouble(
-				VanillaBenchParameters.class.getName() + ".READ_WRITE_TX_RATE", 0.);
-		if (read_rate != 0.) { // if assigned read_rate, use it
+				VanillaBenchParameters.class.getName() + ".READ_WRITE_TX_RATE", -1.); // -1: invalid value
+		if (read_rate != -1.) { // if assigned read_rate, use it
 			TASK_TX_DIST = new double[] { read_rate, 1 - read_rate };
 		} else { // otherwise, use our TASK_TX_DIST parameter
 			TASK_TX_DIST = BenchProperties.getLoader().getPropertyAsDoubleArray(
